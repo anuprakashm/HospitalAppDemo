@@ -1,0 +1,554 @@
+PP 5655-EC6 IBM Enterprise COBOL for z/OS  6.3.0 P190821                 Date 01/21/2021  Time 02:32:00   Page     1
+
+Invocation parameters:
+ LIB,CICS
+
+        IGYOS4090-I   The "LIB" option specification is no longer required.  COBOL library processing is always in effect.
+
+
+PROCESS(CBL) statements:
+ CBL NUMPROC(MIG),FLAG(I,W),RENT
+
+        IGYOS4008-W   The "NUMPROC(MIG)" compiler option was specified, but is not supported.  The option was discarded.
+
+
+Options in effect:
+ NOADATA
+   ADV
+   AFP(NOVOLATILE)
+   QUOTE
+   ARCH(8)
+   ARITH(COMPAT)
+ NOAWO
+ NOBLOCK0
+   BUFSIZE(4096)
+   CICS
+   CODEPAGE(1140)
+ NOCOMPILE(S)
+ NOCOPYLOC
+ NOCOPYRIGHT
+ NOCURRENCY
+   DATA(31)
+   DBCS
+ NODECK
+ NODEFINE
+ NODIAGTRUNC
+   DISPSIGN(COMPAT)
+ NODLL
+ NODUMP
+ NODYNAM
+ NOEXIT
+ NOEXPORTALL
+ NOFASTSRT
+   FLAG(I,W)
+ NOFLAGSTD
+   HGPR(PRESERVE)
+ NOINITCHECK
+ NOINITIAL
+   INLINE
+   INTDATE(ANSI)
+ NOJTC
+   LANGUAGE(EN)
+   LINECOUNT(60)
+ NOLIST
+   LP(32)
+ NOMAP
+   MAXPCF(100000)
+ NOMDECK
+ NONAME
+   NSYMBOL(NATIONAL)
+ NONUMBERPP 5655-EC6 IBM Enterprise COBOL for z/OS  6.3.0 P190821                 Date 01/21/2021  Time 02:32:00   Page     2
+
+ NONUMCHECK
+   NUMPROC(NOPFD)
+   OBJECT
+ NOOFFSET
+   OPTIMIZE(0)
+   OUTDD(SYSOUT)
+ NOPARMCHECK
+   PGMNAME(COMPAT)
+   QUALIFY(COMPAT)
+   RENT
+   RMODE(AUTO)
+ NORULES
+ NOSERVICE
+   SEQUENCE
+ NOSMARTBIN
+   SOURCE
+   SPACE(1)
+ NOSQL
+   SQLCCSID
+ NOSQLIMS
+ NOSSRANGE
+ NOSTGOPT
+   SUPPRESS
+ NOTERM
+ NOTEST(NODWARF,NOSOURCE,NOSEPARATE)
+ NOTHREAD
+   TRUNC(STD)
+ NOVBREF
+   VLR(STANDARD)
+   VSAMOPENFS(COMPAT)
+ NOWORD
+   XMLPARSE(XMLSS)
+   XREF(FULL)
+   ZONEDATA(PFD)
+   ZWB
+
+
+CICS Options in effect:
+ CICS
+ DEBUG
+ EDF
+ NATLANG(EN)
+ APOST
+ NOSYSEIB
+ NOFEPI
+ NOCPSM
+ LINKAGE
+ LENGTH
+ COBOL2PP 5655-EC6 IBM Enterprise COBOL for z/OS  6.3.0 P190821       EPSCSMRT  Date 01/21/2021  Time 02:32:00   Page     3
+  LineID  PL SL  ----+-*A-1-B--+----2----+----3----+----4----+----5----+----6----+----7-|--+----8 Map and Cross Reference
+
+  000001                ID DIVISION.
+  000002                PROGRAM-ID. EPSCSMRT.
+  000003               *    THIS IS A CALLED PROGRAM EXAMPLE FOR DEMONSTRATION
+  000004               *
+  000005               *    THIS PROGRAM IS INVOKED VIA A CICS LINK STATMENT
+  000006               *    AND DYNAMICALLY CALLS THE ACTUAL PROGRAM
+  000007               *
+  000008               *    (C) 2017 IBM JIM HILDNER.
+  000009                ENVIRONMENT DIVISION.
+  000010                CONFIGURATION SECTION.
+  000011                SOURCE-COMPUTER. FLEX-ES.
+  000012                OBJECT-COMPUTER. FLEX-ES.
+  000013                DATA DIVISION.
+  000014                WORKING-STORAGE SECTION.
+  000015               *
+  000016                01  WS-CALLED-PROGRAM    PIC X(8).
+  000017
+  000018                01  STATIC-CALLED-PROGRAMS.
+  000019                    03 STATIC-CALLED-PROGRAM-TABLE.
+  000020                       05 FILLER            PIC X(8) VALUE 'EPSMPMT'.
+  000021                       05 FILLER            PIC X(8) VALUE 'NOT VLD'.
+  000022                       05 FILLER            PIC X(8) VALUE ' '.
+  000023                    03 CALLED-PROGRAM-TABLE
+  000024                                 REDEFINES STATIC-CALLED-PROGRAM-TABLE                    19
+  000025                                 OCCURS 3 TIMES.
+  000026                       05 CALLED-PROGRAM-NAME PIC X(8).
+  000027
+  000028                COPY EPSPDATA.
+  000029C               01  EPSPDATA.
+  000030C              * INPUT
+  000031C                   03 EPSPDATA-PRINCIPLE-DATA   PIC S9(9)V99 COMP.
+  000032C                   03 EPSPDATA-NUMBER-OF-YEARS  PIC S9(4)    COMP.
+  000033C                   03 EPSPDATA-NUMBER-OF-MONTHS PIC S9(4)    COMP.
+  000034C                   03 EPSPDATA-QUOTED-INTEREST-RATE
+  000035C                                                PIC S9(2)v9(3) COMP.
+  000036C                   03 EPSPDATA-YEAR-MONTH-IND   PIC X.
+  000037C              * OUTPUT
+  000038C                   03 EPSPDATA-RETURN-MONTH-PAYMENT
+  000039C                                                PIC S9(7)V99 COMP.
+  000040C                   03 EPSPDATA-RETURN-ERROR     PIC X(80).
+  000041C
+  000042
+  000043                LINKAGE SECTION.
+  000044               *
+  000045                01 DFHCOMMAREA.
+  000046                COPY EPSMTCOM.
+  000047C                  10  PROCESS-INDICATOR               PIC X.
+  000048C
+  000049C                  COPY EPSMTINP.
+  000050C              * INPUT
+  000051C                  10 EPSPCOM-PRINCIPLE-DATA   PIC S9(9)V99 COMP.
+  000052C                  10 EPSPCOM-NUMBER-OF-YEARS  PIC S9(4)    COMP.
+  000053C                  10 EPSPCOM-NUMBER-OF-MONTHS PIC S9(4)    COMP.
+  000054C                  10 EPSPCOM-QUOTED-INTEREST-RATE
+  000055C                                                PIC S9(2)v9(3) COMP.
+  000056C                  10 EPSPCOM-YEAR-MONTH-IND   PIC X.
+  000057C                  COPY EPSMTOUT.PP 5655-EC6 IBM Enterprise COBOL for z/OS  6.3.0 P190821       EPSCSMRT  Date 01/21/2021  Time 02:32:00   Page     4
+  LineID  PL SL  ----+-*A-1-B--+----2----+----3----+----4----+----5----+----6----+----7-|--+----8 Map and Cross Reference
+
+  000058C              * OUTPUT
+  000059C                  10 EPSPCOM-RETURN-MONTH-PAYMENT
+  000060C                                              PIC S9(7)V99 COMP.
+  000061C                  10 EPSPCOM-ERRMSG           PIC X(80).
+  000062C                  10 EPSPCOM-PROGRAM-RETCODE  PIC 9(4).
+  000063C                     88 EPS02-REQUEST-SUCCESS VALUE 0.
+  000064C                  10 EPSPCOM-PROGRAM-RETCODE-RDF
+  000065C                          REDEFINES EPSPCOM-PROGRAM-RETCODE                              62
+  000066C                                              PIC X(4).
+  000067
+  000068                PROCEDURE DIVISION USING DFHCOMMAREA.                                     45
+  000069               *
+  000070                A000-MAINLINE.
+  000071                    MOVE EPSPCOM-PRINCIPLE-DATA  TO EPSPDATA-PRINCIPLE-DATA.              51 31
+  000072                    MOVE EPSPCOM-NUMBER-OF-YEARS TO EPSPDATA-NUMBER-OF-YEARS.             52 32
+  000073                    MOVE 'Y'                     TO EPSPDATA-YEAR-MONTH-IND.              36
+  000074                    MOVE EPSPCOM-QUOTED-INTEREST-RATE                                     54
+  000075                                                 TO
+  000076                                            EPSPDATA-QUOTED-INTEREST-RATE.                34
+  000077                    MOVE CALLED-PROGRAM-NAME(1)  TO WS-CALLED-PROGRAM.                    26 16
+  000078                    MOVE SPACES                  TO EPSPDATA-RETURN-ERROR.                IMP 40
+  000079               *     CALL 'EPSMPMT' USING EPSPDATA.
+  000080                    CALL WS-CALLED-PROGRAM USING EPSPDATA.                                16 29
+  000081                    MOVE EPSPDATA-RETURN-MONTH-PAYMENT                                    38
+  000082                                                 TO
+  000083                                                 EPSPCOM-RETURN-MONTH-PAYMENT.            59
+  000084                    MOVE EPSPDATA-RETURN-ERROR   TO EPSPCOM-ERRMSG.                       40 61
+  000085                    IF EPSPDATA-RETURN-ERROR = SPACES                                     40 IMP
+  000086      1                MOVE ZERO TO EPSPCOM-PROGRAM-RETCODE                               IMP 62
+  000087                    ELSE
+  000088      1                MOVE 8 TO EPSPCOM-PROGRAM-RETCODE                                  62
+  000089                    END-IF.
+  000090                    GOBACK
+  000091                    .PP 5655-EC6 IBM Enterprise COBOL for z/OS  6.3.0 P190821       EPSCSMRT  Date 01/21/2021  Time 02:32:00   Page     5
+
+An "M" preceding a data-name reference indicates that the data-name is modified by this reference.
+
+ Defined   Cross-reference of data names   References
+
+      26   CALLED-PROGRAM-NAME. . . . . .  77
+      23   CALLED-PROGRAM-TABLE
+      45   DFHCOMMAREA. . . . . . . . . .  68
+      61   EPSPCOM-ERRMSG . . . . . . . .  M84
+      53   EPSPCOM-NUMBER-OF-MONTHS
+      52   EPSPCOM-NUMBER-OF-YEARS. . . .  72
+      51   EPSPCOM-PRINCIPLE-DATA . . . .  71
+      62   EPSPCOM-PROGRAM-RETCODE. . . .  65 M86 M88
+      64   EPSPCOM-PROGRAM-RETCODE-RDF
+      54   EPSPCOM-QUOTED-INTEREST-RATE .  74
+      59   EPSPCOM-RETURN-MONTH-PAYMENT .  M83
+      56   EPSPCOM-YEAR-MONTH-IND
+      29   EPSPDATA . . . . . . . . . . .  80
+      33   EPSPDATA-NUMBER-OF-MONTHS
+      32   EPSPDATA-NUMBER-OF-YEARS . . .  M72
+      31   EPSPDATA-PRINCIPLE-DATA. . . .  M71
+      34   EPSPDATA-QUOTED-INTEREST-RATE.  M76
+      40   EPSPDATA-RETURN-ERROR. . . . .  M78 84 85
+      38   EPSPDATA-RETURN-MONTH-PAYMENT.  81
+      36   EPSPDATA-YEAR-MONTH-IND. . . .  M73
+      63   EPS02-REQUEST-SUCCESS
+      47   PROCESS-INDICATOR
+      19   STATIC-CALLED-PROGRAM-TABLE. .  24
+      18   STATIC-CALLED-PROGRAMS
+      16   WS-CALLED-PROGRAM. . . . . . .  M77 80PP 5655-EC6 IBM Enterprise COBOL for z/OS  6.3.0 P190821       EPSCSMRT  Date 01/21/2021  Time 02:32:00   Page     6
+
+Context usage is indicated by the letter preceding a procedure-name reference.
+These letters and their meanings are:
+    A = ALTER (procedure-name)
+    D = GO TO (procedure-name) DEPENDING ON
+    E = End of range of (PERFORM) through (procedure-name)
+    G = GO TO (procedure-name)
+    P = PERFORM (procedure-name)
+    T = (ALTER) TO PROCEED TO (procedure-name)
+    U = USE FOR DEBUGGING (procedure-name)
+
+ Defined   Cross-reference of procedures   References
+
+      70   A000-MAINLINEPP 5655-EC6 IBM Enterprise COBOL for z/OS  6.3.0 P190821       EPSCSMRT  Date 01/21/2021  Time 02:32:00   Page     7
+
+ Defined   Cross-reference of programs     References
+
+       2   EPSCSMRTPP 5655-EC6 IBM Enterprise COBOL for z/OS  6.3.0 P190821       EPSCSMRT  Date 01/21/2021  Time 02:32:00   Page     8
+
+
+         COPY/BASIS cross-reference of text-names, library names and dataset information
+
+ Text-name Library   File name                                    Concat   ISPF statistics
+ (Member)  (DDNAME)  (Dataset name)                               Level    Created         Changed
+
+ EPSMTCOM  SYSLIB    IBMUSER.MORTGAGE.JENKINS.COPY                  0
+ EPSMTINP  SYSLIB    IBMUSER.MORTGAGE.JENKINS.COPY                  0
+ EPSMTOUT  SYSLIB    IBMUSER.MORTGAGE.JENKINS.COPY                  0
+ EPSPDATA  SYSLIB    IBMUSER.MORTGAGE.JENKINS.COPY                  0
+PP 5655-EC6 IBM Enterprise COBOL for z/OS  6.3.0 P190821       EPSCSMRT  Date 01/21/2021  Time 02:32:00   Page     9
+
+LineID  Message code  Message text
+
+        IGYDS0139-W   Diagnostic messages were issued during processing of compiler options.  These messages are located at the
+                      beginning of the listing.
+
+        IGYSC0238-W   "CICS" option was specified, but there is no "EXEC CICS" statement in the program.
+
+
+Messages    Total    Informational    Warning    Error    Severe    Terminating
+
+Printed:       4           1              3
+
+
+* Statistics for COBOL program EPSCSMRT:
+*    Source records = 206
+*    Data Division statements = 131
+*    Procedure Division statements = 13
+*    Generated COBOL statements = 0
+*    Program complexity factor = 13
+
+End of compilation 1,  program EPSCSMRT,  highest severity 4.
+
+Return code 4
+1z/OS V2 R4 BINDER     02:32:02 THURSDAY JANUARY 21, 2021
+ BATCH EMULATOR  JOB(IBMUSER9) STEP(*OMVSEX ) PGM= IEWBLINK
+ IEW2278I B352 INVOCATION PARAMETERS - MAP,RENT,COMPAT(PM5)
+
+1                         *** M O D U L E  M A P ***
+
+ ---------------
+ CLASS  C_CODE            LENGTH =      AB0  ATTRIBUTES = CAT,   LOAD, RMODE=ANY
+                          OFFSET =        0 IN SEGMENT 001     ALIGN = DBLWORD
+ ---------------
+
+  SECTION    CLASS                                      ------- SOURCE --------
+   OFFSET   OFFSET  NAME                TYPE    LENGTH  DDNAME   SEQ  MEMBER
+
+                 0  EPSCSMRT           CSECT       AB0  SYSLIN    01  **NULL**
+        0        0     EPSCSMRT#C         LABEL
+        0        0     EPSCSMRT           LABEL
+
+ ---------------
+ CLASS  C_@@PPA2          LENGTH =        8  ATTRIBUTES = MRG,   LOAD, RMODE=ANY
+                          OFFSET =      AB0 IN SEGMENT 001     ALIGN = DBLWORD
+ ---------------
+
+             CLASS
+            OFFSET  NAME                TYPE    LENGTH   SECTION
+                 0  $PRIV000010      PART             8  EPSCSMRT
+
+ ---------------
+ CLASS  C_@@CSINIT        LENGTH =        4  ATTRIBUTES = MRG,   LOAD, RMODE=ANY
+                          OFFSET =      AB8 IN SEGMENT 001     ALIGN = DBLWORD
+ ---------------
+
+             CLASS
+            OFFSET  NAME                TYPE    LENGTH   SECTION
+                 0  $PRIV000011      PART             4  EPSCSMRT
+
+ ---------------
+ CLASS  B_TEXT            LENGTH =      C20  ATTRIBUTES = CAT,   LOAD, RMODE=ANY
+                          OFFSET =      AC0 IN SEGMENT 001     ALIGN = DBLWORD
+ ---------------
+
+  SECTION    CLASS                                      ------- SOURCE --------
+   OFFSET   OFFSET  NAME                TYPE    LENGTH  DDNAME   SEQ  MEMBER
+
+                 0  IGZXBS61        *  CSECT        10  SYSLIB    02  IGZXBS61
+
+                10  CEESG004        *  CSECT        34  SYSLIB    02  CEESG004
+
+                48  IGZXRT1         *  CSECT        12  SYSLIB    02  IGZXRT1
+
+                60  IGZXTREN        *  CSECT        12  SYSLIB    02  IGZXTREN
+
+                78  IGZXRTN         *  CSECT        12  SYSLIB    02  IGZXRTN
+
+                90  IGZXVMO         *  CSECT        12  SYSLIB    02  IGZXVMO
+
+                A8  IGZXCMSG        *  CSECT        12  SYSLIB    02  IGZXCMSG
+
+                C0  IGZXPRS         *  CSECT        12  SYSLIB    02  IGZXPRS
+
+                D8  IGZXFCAL        *  CSECT        12  SYSLIB    02  IGZXFCAL
+
+                F0  IGZXBST4        *  CSECT       4E0  SYSLIB    02  IGZXBST4
+
+1                         *** M O D U L E  M A P ***
+
+  SECTION    CLASS                                      ------- SOURCE --------
+   OFFSET   OFFSET  NAME                TYPE    LENGTH  DDNAME   SEQ  MEMBER
+
+               5D0  CEEBETBL        *  CSECT        28  SYSLIB    02  CEEBETBL
+
+               5F8  CEESTART        *  CSECT        B0  SYSLIB    02  CEESTART
+
+               6A8  CEEBPUBT        *  CSECT        70  SYSLIB    02  CEEBPUBT
+
+               718  CEEBTRM         *  CSECT        74  SYSLIB    02  CEEBTRM
+
+               790  CEECPYRT        *  CSECT        CF  SYSLIB    02  CEEBTRM
+
+               860  CEEBLLST        *  CSECT        5C  SYSLIB    02  CEEBLLST
+       10      870     CEELLIST           LABEL
+
+               8C0  CEEBINT         *  CSECT         8  SYSLIB    02  CEEBINT
+
+               8C8  CEEARLU         *  CSECT        B8  SYSLIB    02  CEEARLU
+
+               980  CEEBPIRA        *  CSECT       2A0  SYSLIB    02  CEEINT
+        0      980     CEEINT             LABEL
+        0      980     CEEBPIRB           LABEL
+        0      980     CEEBPIRC           LABEL
+1                         *** M O D U L E  M A P ***
+
+ ---------------
+ CLASS  B_LIT             LENGTH =      100  ATTRIBUTES = CAT,   LOAD, RMODE=ANY
+                          OFFSET =     16E0 IN SEGMENT 001     ALIGN = DBLWORD
+ ---------------
+
+  SECTION    CLASS                                      ------- SOURCE --------
+   OFFSET   OFFSET  NAME                TYPE    LENGTH  DDNAME   SEQ  MEMBER
+
+                 0  IEWBLIT            CSECT       100                **NULL**
+        0        0     IEWBLIT            LABEL
+
+ ---------------
+ CLASS  C_WSA             LENGTH =       A8  ATTRIBUTES = MRG, DEFER , RMODE=ANY
+                          OFFSET =        0 IN SEGMENT 002     ALIGN = DBLWORD
+ ---------------
+
+             CLASS
+            OFFSET  NAME                TYPE    LENGTH   SECTION
+                 0  $PRIV000012      PART            10
+                10  EPSCSMRT#S       PART            98  EPSCSMRT
+
+ ---------------
+ CLASS  C_CEESG003        LENGTH =        0  ATTRIBUTES = CAT, NOLOAD
+
+ ---------------
+
+  SECTION    CLASS                                      ------- SOURCE --------
+   OFFSET   OFFSET  NAME                TYPE    LENGTH  DDNAME   SEQ  MEMBER
+
+                 0  EPSCSMRT           CSECT         0  SYSLIN    01  **NULL**
+1          ***  DATA SET SUMMARY  ***
+
+ DDNAME    CONCAT   FILE IDENTIFICATION
+
+ SYSLIB      02     CEE.SCEELKED
+ SYSLIN      01     SYS21021.T023200.RA000.IBMUSER9.TEMPOBJ.H01
+1          *** SYMBOL REFERENCES NOT ASSOCIATED WITH ANY ADCON ***
+
+ TYPE   SCOPE   NAME
+
+
+           *** E N D  O F  M O D U L E  M A P ***
+
+
+
+                                 *** O P E R A T I O N   S U M M A R Y   R E P O R T ***
+
+1PROCESSING OPTIONS:
+
+    ALIASES             NO
+    ALIGN2              NO
+    AMODE               UNSPECIFIED
+    CALL                YES
+    CASE                UPPER
+    COMPAT              ZOSV1R8
+    COMPRESS            AUTO
+    DCBS                NO
+    DYNAM               NO
+    EXTATTR             UNSPECIFIED
+    EXITS:              NONE
+    FILL                NONE
+    GID                 UNSPECIFIED
+    HOBSET              NO
+    INFO                NO
+    LET                 04
+    LINECT              060
+    LIST                SUMMARY
+    LISTPRIV            NO
+    LONGPARM            NO
+    MAP                 YES
+    MAXBLK              032760
+    MODMAP              NO
+    MSGLEVEL            00
+    OVLY                NO
+    PRINT               YES
+    RES                 NO
+    REUSABILITY         REENTRANT
+    RMODE               UNSPECIFIED
+    RMODEX              NO
+    SIGN                NO
+    STORENX             NOREPLACE
+    STRIPCL             NO
+    STRIPSEC            NO
+    SYMTRACE
+    TERM                NO
+    TRAP                ON
+    UID                 UNSPECIFIED
+    UPCASE              NO
+    WKSPACE             000000K,000000K
+    XCAL                NO
+    XREF                NO
+    ***END OF OPTIONS***
+
+
+
+
+1SAVE OPERATION SUMMARY:
+
+    MEMBER NAME         EPSCSMRT
+    LOAD LIBRARY        IBMUSER.MORTGAGE.JENKINS.LOAD
+    PROGRAM TYPE        PROGRAM OBJECT(FORMAT 5 OS COMPAT LEVEL z/OS V1R8 )
+    VOLUME SERIAL       USER01
+    DISPOSITION         REPLACED
+    TIME OF SAVE        02.32.04  JAN 21, 2021
+
+
+1SAVE MODULE ATTRIBUTES:
+
+    AC                  000
+    AMODE                31
+    COMPRESSION         BINDER DATA
+    DC                  NO
+    EDITABLE            YES
+    EXCEEDS 16MB        NO
+    EXECUTABLE          YES
+    LONGPARM            NO
+    MIGRATABLE          NO
+    OL                  NO
+    OVLY                NO
+    PACK,PRIME          NO,NO
+    PAGE ALIGN          NO
+    REFR                NO
+    RENT                YES
+    REUS                YES
+    RMODE               ANY
+    SCTR                NO
+    SIGN                NO
+    SSI
+    SYM GENERATED       NO
+    TEST                NO
+    XPLINK              NO
+    MODULE SIZE (HEX)   00001888
+    DASD SIZE (HEX)     00007000
+
+
+1 ENTRY POINT AND ALIAS SUMMARY:
+
+  NAME:            ENTRY TYPE AMODE C_OFFSET CLASS NAME        STATUS
+
+  EPSCSMRT          MAIN_EP      31 00000000 C_CODE
+
+                          *** E N D   O F   O P E R A T I O N   S U M M A R Y   R E P O R T ***
+
+
+
+
+1z/OS V2 R4 BINDER     02:32:02 THURSDAY JANUARY 21, 2021
+ BATCH EMULATOR  JOB(IBMUSER9) STEP(*OMVSEX ) PGM= IEWBLINK
+ IEW2008I 0F03 PROCESSING COMPLETED.  RETURN CODE =  0.
+
+
+
+1----------------------
+ MESSAGE SUMMARY REPORT
+ ----------------------
+  TERMINAL MESSAGES      (SEVERITY = 16)
+  NONE
+
+  SEVERE MESSAGES        (SEVERITY = 12)
+  NONE
+
+  ERROR MESSAGES         (SEVERITY = 08)
+  NONE
+
+  WARNING MESSAGES       (SEVERITY = 04)
+  NONE
+
+  INFORMATIONAL MESSAGES (SEVERITY = 00)
+  2008  2278
+
+
+  **** END OF MESSAGE SUMMARY REPORT ****
+
